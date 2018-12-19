@@ -1,28 +1,30 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
+import React from 'react';
 import './App.css';
+import Header from "./Header";
+import Card from "./Card";
+import {branch, renderComponent} from "recompose";
+import Spinner from "./Spinner";
 
-class App extends Component {
-  render() {
+const App = ({ datas }) => {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+      <div className="app-container">
+        <Header id="main-header"/>
+        <div className="body-container">
+          {
+            datas.map(data => (
+              <Card
+                key={data.name}
+                name={data.name}
+                picture={data.picture}
+                description={data.description} />
+            ))
+          }
+        </div>
       </div>
     );
-  }
-}
+};
 
-export default App;
+export default branch(
+  props => props.datas.length === 0,
+  renderComponent(Spinner),
+)(App);
